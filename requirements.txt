@@ -5,3 +5,4 @@ seaborn
 kagglehub
 jupyter
 scikit-learn
+xgboost
