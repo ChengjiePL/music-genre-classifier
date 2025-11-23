@@ -1,0 +1,17 @@
+# Ignorar archivos temporales de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+*.pkl
+
+# Ignorar configuraciones de Jupyter
+.ipynb_checkpoints/
+
+# Ignorar entornos virtuales (si usas venv)
+venv/
+env/
+.env
+
+# Ignorar datos sensibles o muy pesados (opcional)
+dataset/
