@@ -6,3 +6,6 @@ kagglehub
 jupyter
 scikit-learn
 xgboost
+streamlit
+plotly
+joblib
