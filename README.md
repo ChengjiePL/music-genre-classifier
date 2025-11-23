@@ -1,64 +1,107 @@
-# 🎵 Music Genre Classification - Spotify Top 2010-2019
+# 🎵 Clasificación de Géneros Musicales con Spotify API & XGBoost
 
-This project explores the application of Machine Learning algorithms to predict the musical genre of a song based on its audio features (BPM, energy, dance-ability, etc.).
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
+![Jupyter](https://img.shields.io/badge/Notebook-Jupyter-orange?style=for-the-badge&logo=jupyter)
+![XGBoost](https://img.shields.io/badge/Model-XGBoost-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-InProgress-success?style=for-the-badge)
 
-The main goal of this experiment was to analyze the performance of a **Random Forest** classifier in a real-world, **highly imbalanced** dataset.
+> **Entrega Práctica MD3 - Machine Learning**
+>
+> **Autor:** ChengjiePL
+> **Fecha:** Noviembre 2025
 
-## 📂 Dataset
+---
 
-The data was obtained from Kaggle: [Top Spotify Songs from 2010-2019 - BY YEAR](https://www.kaggle.com/datasets/leonardopena/top-spotify-songs-from-20102019-by-year).
+## 📖 Descripción del Proyecto
 
-- **Inputs (Features):** Numerical variables such as `bpm`, `nrgy` (energy), `dnce` (dance-ability), `dB` (loudness).  
-- **Target:** The variable `top genre`.
+Este proyecto aborda un problema clásico de clasificación supervisada: **Predecir el género musical de una canción (Rock, Dance, Classical, Acoustic) basándose únicamente en sus propiedades físico-matemáticas.**
 
-## ⚠️ The Challenge: Class Imbalance
+Utilizando un dataset de canciones extraído de la API de Spotify, se ha desarrollado un flujo de trabajo completo de Data Science, desde el análisis exploratorio inicial hasta la optimización de modelos avanzados de Gradient Boosting.
 
-During the Exploratory Data Analysis (EDA), we identified a critical issue in the dataset that served as a case study for this practice:
+### 🎯 Objetivo Principal
 
-1. **Overly specific classes:** The original genres were too granular (e.g., *'canadian pop'*, *'barbadian pop'*, *'australian dance'*).  
-2. **Dominance of the majority class:** More than **80%** of top global songs belonged to the **Pop** genre. Genres like *Rock*, *Hip Hop*, or *Latin* had very few examples (sometimes less than 5).
+Desarrollar un modelo predictivo capaz de distinguir patrones sónicos complejos, como diferenciar una canción de rock (alta energía, instrumentación real) de una canción acústica (baja energía, instrumentación real) o una pista de baile (alta energía, sintética).
 
-### 🛠️ Applied Solution: Feature Engineering
+---
 
-To mitigate this problem, we implemented preprocessing in Python to group subgenres into main categories:
+## 📂 Estructura del Repositorio
 
-```python
-def simplify_genre(genre):
-    if 'pop' in genre: return 'Pop'
-    elif 'hip hop' in genre: return 'Hip Hop'
-    # ... (rest of the grouping logic)
-````
+---
 
-## 📊 Model Results
+## 🧠 Metodología y Fases del Proyecto (Notebook)
 
-A **Random Forest Classifier** was trained.
+El notebook `Music_Genre_Classification.ipynb` sigue una estructura rigurosa de 6 fases:
 
-| Global Metric | Value |
-| ------------- | ----- |
-| **Accuracy**  | ~84%  |
+### 1. Análisis Exploratorio de Datos (EDA) 📊
 
-![Small Dataset](./images/SmallDataset.png)
+Antes de modelar, se realizó una "radiografía" completa de los datos para entender qué define a cada género:
+*   **Distribución de Variables:** Uso de histogramas y *boxplots* para identificar que, por ejemplo, la `danceability` es el discriminante clave entre *Classical* y *Dance*.
+*   **Mapa de Correlaciones:** Detección de multicolinealidad. Se descubrió una fuerte correlación negativa entre `energy` y `acousticness`.
+*   **Análisis de Outliers:** Identificación de canciones atípicas (ej: canciones de rock muy suaves) que podrían confundir al modelo.
 
-### Critical Analysis (The "Accuracy Trap")
+### 2. Feature Engineering🛠️
 
-Despite achieving 84% accuracy, a detailed analysis (Confusion Matrix) revealed the impact of class imbalance:
+Para mejorar la capacidad predictiva, no nos limitamos a las variables originales. Creamos nuevas métricas sintéticas basadas en conocimiento del dominio musical:
+*   **`Intensity`**: Producto de `energy * loudness`. Captura la "potencia" percibile.
+*   **`Dance_Tempo`**: Relación entre ritmo y velocidad.
+*   **`Chill_Factor`**: Diferencia entre valencia positiva y energía, útil para separar géneros relajados.
 
-* **Pop Class:** The model had excellent precision and recall (>90%).
-* **Minority Classes (Rock, Latin, Hip Hop):** The model achieved metrics close to **0%**.
+### 3. Preprocesamiento de Datos 🧹
 
-**Experiment Conclusion:**
-The model learned that, statistically, the safest strategy to minimize error was to classify almost all songs as "Pop". This case demonstrates the importance of balanced datasets and how *Accuracy* can be misleading on biased datasets.
+*   Codificación de variables categóricas (`LabelEncoder`).
+*   Escalado de datos (`StandardScaler`) para algoritmos sensibles a la magnitud (como KNN en la fase experimental).
+*   División estratificada del dataset (Train/Test Split) para garantizar que todos los géneros estén representados equitativamente.
 
-## 🚀 How to Run the Project
+### 4. Selección y Entrenamiento de Modelos 🤖
 
-1. Clone this repository.
-2. Install the required dependencies:
+Se sometieron a prueba dos familias de algoritmos:
+1.  **Random Forest:** Como modelo base de *bagging*.
+2.  **XGBoost (Extreme Gradient Boosting):** Como modelo avanzado de *boosting*.
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Open and run the file `notebook.ipynb`.
+**Resultado:** XGBoost superó al Random Forest en métricas de precisión y ROC-AUC, demostrando mayor capacidad para manejar las fronteras de decisión complejas entre *Rock* y *Acoustic*.
 
-## 👤 Author
+### 5. Evaluación y Métricas 📈
 
-[Chengjie Peng Lin] - Kaggle Machine Learning Practice
+El modelo final fue auditado exhaustivamente:
+*   **Matriz de Confusión:** Análisis de errores tipo I y II. (ej: ¿Con qué confunde la IA al Rock?).
+*   **Curva ROC / AUC:** Validación de la robustez del clasificador (>0.95 AUC).
+*   **Feature Importance:** Confirmación de que `acousticness` y `loudness` son los predictores más potentes.
+
+---
+
+## 🏆 Resultados Clave
+
+| Métrica | Random Forest | **XGBoost (Final)** |
+| :--- | :---: | :---: |
+| Accuracy | 89% | **92%** |
+| F1-Score (Macro) | 0.88 | **0.91** |
+
+
+> **Conclusión Técnica:** El modelo demuestra que los géneros musicales no son etiquetas subjetivas, sino clústeres matemáticos bien definidos. La separación entre géneros acústicos (Classical/Acoustic) y eléctricos (Rock/Dance) es casi perfecta, existiendo solo una pequeña confusión en las fronteras difusas (subgéneros híbridos).
+
+---
+
+## 🚀 Extra: Aplicación MLOps
+
+Como complemento al análisis, se ha incluido en la carpeta `/app` una pequeña demostración de **Productivización del Modelo**.
+
+Se trata de un script en Streamlit (`spotify_recommender.py`) que carga el modelo entrenado y permite realizar inferencias en tiempo real, además de incluir un sistema de recomendación básico mediante KNN.
+
+---
+
+## ⚙️ Reproducibilidad
+
+Para ejecutar el notebook en local:
+
+1.  Clonar el repositorio.
+2.  Instalar dependencias:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Lanzar Jupyter:
+    ```bash
+    jupyter notebook Music_Genre_Classification.ipynb
+    ```
+
+---
+*Proyecto realizado para la asignatura de Aprendizaje Computacional.*
