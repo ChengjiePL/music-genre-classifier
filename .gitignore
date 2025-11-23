@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.log
-*.pkl
+#*.pkl
 
 # Ignorar configuraciones de Jupyter
 .ipynb_checkpoints/

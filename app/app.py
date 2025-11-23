@@ -38,54 +38,45 @@ st.markdown("""
 # --- FUNCIONES DE CARGA ---
 @st.cache_resource
 def load_resources():
+    # 1. Configuración de rutas (Robusta para Local y Cloud)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, 'modelo_xgboost_final.pkl')
+    dataset_path = os.path.join(current_dir, '..', 'dataset', 'top10s.csv')
+    
+    model = None
+    df = None
+
+    # 2. Cargar Modelo
     try:
-        model = joblib.load('modelo_xgboost_final.pkl')
+        model = joblib.load(model_path)
     except FileNotFoundError:
         return None, None
 
+    # 3. Cargar y Procesar Dataset
     try:
-        df = pd.read_csv('../dataset/top10s.csv', encoding='ISO-8859-1') 
+        df = pd.read_csv(dataset_path, encoding='ISO-8859-1')
         
-        # 1. RENOMBRADO
+        # Mapeo de columnas (Dataset 2010-2019 -> Modelo XGBoost)
         column_mapping = {
-            'pop': 'popularity',
-            'dur': 'duration_ms',
-            'dB': 'loudness',
-            'spch': 'speechiness',
-            'acous': 'acousticness',
-            'live': 'liveness',
-            'val': 'valence',
-            'bpm': 'tempo',
-            'title': 'name',
-            'artist': 'artists',
-            'dnce': 'danceability',
-            'nrgy': 'energy'
+            'title': 'name', 'artist': 'artists', 'top genre': 'music_genre',
+            'bpm': 'tempo', 'nrgy': 'energy', 'dnce': 'danceability',
+            'dB': 'loudness', 'live': 'liveness', 'val': 'valence',
+            'dur': 'duration_ms', 'acous': 'acousticness', 'spch': 'speechiness',
+            'pop': 'popularity'
         }
         df = df.rename(columns=column_mapping)
         
-        # 2. CORRECCIÓN DE UNIDADES (Duración viene en seg, pasamos a ms)
-        # Si la media es < 1000, es seguro que está en segundos
+        # Corrección de unidades (segundos a milisegundos)
         if 'duration_ms' in df.columns and df['duration_ms'].mean() < 1000:
             df['duration_ms'] = df['duration_ms'] * 1000
             
-        # 3. RELLENO DE EMERGENCIA (Imputación)
-        # Estas columnas faltan en el dataset Top10s, pero el modelo las exige.
-        # Usamos valores promedio/neutros del dataset original para no romper la IA.
-        
-        if 'key' not in df.columns:
-            df['key'] = 5  # Clave promedio (Do/Sol/etc)
-            
-        if 'mode' not in df.columns:
-            df['mode'] = 1 # Modo Mayor (lo más común en Pop)
-            
-        if 'time_signature' not in df.columns:
-            df['time_signature'] = 4 # 4/4 es el estándar del 99% del pop
-            
-        if 'instrumentalness' not in df.columns:
-            # El Top 50 suele tener muy poco instrumental. Asumimos 0.
-            df['instrumentalness'] = 0.0 
-            
-        # --- Resto igual que antes ---
+        # Imputación de variables faltantes (para compatibilidad con el modelo)
+        defaults = {'key': 5, 'mode': 1, 'time_signature': 4, 'instrumentalness': 0.0}
+        for col, val in defaults.items():
+            if col not in df.columns:
+                df[col] = val
+
+        # Limpieza final
         df = df.dropna()
         if 'name' in df.columns: df['name'] = df['name'].astype(str)
         if 'artists' in df.columns: df['artists'] = df['artists'].astype(str)
@@ -94,9 +85,9 @@ def load_resources():
              df['display_name'] = df['name'] + " - " + df['artists']
              
         return model, df
-        
-    except Exception as e:
-        st.error(f"Error cargando datos: {e}")
+
+    except Exception:
+        # Si falla algo crítico, devolvemos None para que la app muestre el error de "Faltan archivos"
         return model, None
 
 model, df_music = load_resources()
