@@ -12,6 +12,8 @@ __pycache__/
 venv/
 env/
 .env
+.cache
 
 # Ignorar datos sensibles o muy pesados (opcional)
 dataset/
+!dataset/top10s.csv

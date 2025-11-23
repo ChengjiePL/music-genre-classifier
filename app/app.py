@@ -38,32 +38,65 @@ st.markdown("""
 # --- FUNCIONES DE CARGA ---
 @st.cache_resource
 def load_resources():
-    # 1. Cargar Modelo XGBoost
     try:
         model = joblib.load('modelo_xgboost_final.pkl')
     except FileNotFoundError:
         return None, None
 
-    # 2. Cargar Dataset
     try:
-        df = pd.read_csv('../dataset/universal_top_spotify_songs.csv')
-        df = df.dropna()
+        df = pd.read_csv('../dataset/top10s.csv', encoding='ISO-8859-1') 
         
-        if 'name' in df.columns:
-            df['name'] = df['name'].astype(str)
-        if 'artists' in df.columns:
-            df['artists'] = df['artists'].astype(str)
+        # 1. RENOMBRADO
+        column_mapping = {
+            'pop': 'popularity',
+            'dur': 'duration_ms',
+            'dB': 'loudness',
+            'spch': 'speechiness',
+            'acous': 'acousticness',
+            'live': 'liveness',
+            'val': 'valence',
+            'bpm': 'tempo',
+            'title': 'name',
+            'artist': 'artists',
+            'dnce': 'danceability',
+            'nrgy': 'energy'
+        }
+        df = df.rename(columns=column_mapping)
+        
+        # 2. CORRECCIÓN DE UNIDADES (Duración viene en seg, pasamos a ms)
+        # Si la media es < 1000, es seguro que está en segundos
+        if 'duration_ms' in df.columns and df['duration_ms'].mean() < 1000:
+            df['duration_ms'] = df['duration_ms'] * 1000
+            
+        # 3. RELLENO DE EMERGENCIA (Imputación)
+        # Estas columnas faltan en el dataset Top10s, pero el modelo las exige.
+        # Usamos valores promedio/neutros del dataset original para no romper la IA.
+        
+        if 'key' not in df.columns:
+            df['key'] = 5  # Clave promedio (Do/Sol/etc)
+            
+        if 'mode' not in df.columns:
+            df['mode'] = 1 # Modo Mayor (lo más común en Pop)
+            
+        if 'time_signature' not in df.columns:
+            df['time_signature'] = 4 # 4/4 es el estándar del 99% del pop
+            
+        if 'instrumentalness' not in df.columns:
+            # El Top 50 suele tener muy poco instrumental. Asumimos 0.
+            df['instrumentalness'] = 0.0 
+            
+        # --- Resto igual que antes ---
+        df = df.dropna()
+        if 'name' in df.columns: df['name'] = df['name'].astype(str)
+        if 'artists' in df.columns: df['artists'] = df['artists'].astype(str)
         
         if 'name' in df.columns and 'artists' in df.columns:
-            df = df.drop_duplicates(subset=['name', 'artists'], keep='first')
-        
-        if 'artists' in df.columns:
              df['display_name'] = df['name'] + " - " + df['artists']
-        else:
-             df['display_name'] = df['name']
              
         return model, df
-    except FileNotFoundError:
+        
+    except Exception as e:
+        st.error(f"Error cargando datos: {e}")
         return model, None
 
 model, df_music = load_resources()
