@@ -16,4 +16,4 @@ env/
 
 # Ignorar datos sensibles o muy pesados (opcional)
 dataset/
-!dataset/top10s.csv
+!dataset/dataset_demo_balanced.csv

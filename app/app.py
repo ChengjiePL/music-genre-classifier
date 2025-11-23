@@ -39,48 +39,34 @@ st.markdown("""
 # --- FUNCIONES DE CARGA ---
 @st.cache_resource
 def load_resources():
-    # 1. Configuración de rutas (Robusta para Local y Cloud)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(current_dir, 'modelo_xgboost_final.pkl')
-    dataset_path = os.path.join(current_dir, '..', 'dataset', 'top10s.csv')
+    # Apuntamos al nuevo dataset equilibrado
+    dataset_path = os.path.join(current_dir, '..', 'dataset', 'dataset_demo_balanced.csv')
     
     model = None
     df = None
 
-    # 2. Cargar Modelo
     try:
         model = joblib.load(model_path)
     except FileNotFoundError:
         return None, None
 
-    # 3. Cargar y Procesar Dataset
     try:
-        df = pd.read_csv(dataset_path, encoding='ISO-8859-1')
+        # Cargamos el dataset "Perfecto"
+        df = pd.read_csv(dataset_path)
         
-        # Mapeo de columnas (Dataset 2010-2019 -> Modelo XGBoost)
-        column_mapping = {
-            'title': 'name', 'artist': 'artists', 'top genre': 'music_genre',
-            'bpm': 'tempo', 'nrgy': 'energy', 'dnce': 'danceability',
-            'dB': 'loudness', 'live': 'liveness', 'val': 'valence',
-            'dur': 'duration_ms', 'acous': 'acousticness', 'spch': 'speechiness',
-            'pop': 'popularity'
-        }
-        df = df.rename(columns=column_mapping)
+        # Como este dataset YA TIENE las columnas correctas,
+        # borramos todo el código de "column_mapping" y "defaults".
+        # ¡Mucho más limpio! ✨
         
-        # Corrección de unidades (segundos a milisegundos)
-        if 'duration_ms' in df.columns and df['duration_ms'].mean() < 1000:
-            df['duration_ms'] = df['duration_ms'] * 1000
-            
-        # Imputación de variables faltantes (para compatibilidad con el modelo)
-        defaults = {'key': 5, 'mode': 1, 'time_signature': 4, 'instrumentalness': 0.0}
-        for col, val in defaults.items():
-            if col not in df.columns:
-                df[col] = val
-
-        # Limpieza final
         df = df.dropna()
-        if 'name' in df.columns: df['name'] = df['name'].astype(str)
-        if 'artists' in df.columns: df['artists'] = df['artists'].astype(str)
+        
+        # Conversión básica de seguridad
+        str_cols = ['name', 'artists', 'album_name']
+        for col in str_cols:
+            if col in df.columns:
+                df[col] = df[col].astype(str)
         
         if 'name' in df.columns and 'artists' in df.columns:
              df['display_name'] = df['name'] + " - " + df['artists']
@@ -88,7 +74,6 @@ def load_resources():
         return model, df
 
     except Exception:
-        # Si falla algo crítico, devolvemos None para que la app muestre el error de "Faltan archivos"
         return model, None
 
 model, df_music = load_resources()
