@@ -74,8 +74,8 @@ El model final (XGBoost) ha demostrat una robustesa excepcional:
 
 <p align="center">
   <!-- Pots substituir aquestes rutes per les imatges reals si les puges al repo -->
-  <img src="assets/confusion_matrix.png" alt="Confusion Matrix" width="45%">
-  <img src="assets/roc_curve.png" alt="ROC Curve" width="45%">
+  <img src="./images/matrix.png" alt="Confusion Matrix" width="45%">
+  <img src="./images/roc.png" alt="ROC Curve" width="45%">
 </p>
 
 *   **Classical & Dance:** Gairebé perfectes (F1 > 0.90).
