@@ -1,107 +1,123 @@
-# 🎵 Clasificación de Géneros Musicales con Spotify API & XGBoost
+# 🎵 Music Genre Classification Project
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
-![Jupyter](https://img.shields.io/badge/Notebook-Jupyter-orange?style=for-the-badge&logo=jupyter)
-![XGBoost](https://img.shields.io/badge/Model-XGBoost-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-InProgress-success?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?logo=jupyter&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Library-Scikit--Learn-orange?logo=scikit-learn&logoColor=white)
+![XGBoost](https://img.shields.io/badge/Model-XGBoost-green?logo=xgboost&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-> **Entrega Práctica MD3 - Machine Learning**
->
-> **Autor:** ChengjiePL
-> **Fecha:** Noviembre 2025
+> **Un enfocament de Data Science rigorós per classificar gèneres musicals utilitzant característiques d'àudio de Spotify, des de l'Exploratory Data Analysis (EDA) fins al desplegament d'un model XGBoost optimitzat.**
 
 ---
 
-## 📖 Descripción del Proyecto
+## 📖 Descripció del Projecte
 
-Este proyecto aborda un problema clásico de clasificación supervisada: **Predecir el género musical de una canción (Rock, Dance, Classical, Acoustic) basándose únicamente en sus propiedades físico-matemáticas.**
+Aquest projecte desenvolupa un model de *Machine Learning* capaç de classificar cançons en quatre gèneres musicals distintius (**Acoustic, Classical, Dance, Hard-Rock**) basant-se exclusivament en les seves propietats acústiques (`energy`, `valence`, `tempo`, etc.).
 
-Utilizando un dataset de canciones extraído de la API de Spotify, se ha desarrollado un flujo de trabajo completo de Data Science, desde el análisis exploratorio inicial hasta la optimización de modelos avanzados de Gradient Boosting.
+L'objectiu no és només obtenir una alta precisió, sinó demostrar un **flux de treball científic complet**: des de la neteja de dades i l'enginyeria de característiques fins a l'avaluació probabilística avançada i la interpretació de models "Black Box".
 
-### 🎯 Objetivo Principal
-
-Desarrollar un modelo predictivo capaz de distinguir patrones sónicos complejos, como diferenciar una canción de rock (alta energía, instrumentación real) de una canción acústica (baja energía, instrumentación real) o una pista de baile (alta energía, sintética).
-
----
-
-## 📂 Estructura del Repositorio
+### 🎯 Objectius Principals
+1.  **Entendre les dades:** Analitzar com es diferencien els gèneres físicament mitjançant tècniques estadístiques i visuals (PCA, Correlacions).
+2.  **Construir un classificador robust:** Superar el 85% d'accuracy minimitzant el *data leakage*.
+3.  **Optimització científica:** Utilitzar tècniques avançades com *GridSearchCV* i *Cross-Validation* per garantir l'estabilitat.
 
 ---
 
-## 🧠 Metodología y Fases del Proyecto (Notebook)
+## 🛠️ Tecnologies i Llibreries
 
-El notebook `Music_Genre_Classification.ipynb` sigue una estructura rigurosa de 6 fases:
-
-### 1. Análisis Exploratorio de Datos (EDA) 📊
-
-Antes de modelar, se realizó una "radiografía" completa de los datos para entender qué define a cada género:
-*   **Distribución de Variables:** Uso de histogramas y *boxplots* para identificar que, por ejemplo, la `danceability` es el discriminante clave entre *Classical* y *Dance*.
-*   **Mapa de Correlaciones:** Detección de multicolinealidad. Se descubrió una fuerte correlación negativa entre `energy` y `acousticness`.
-*   **Análisis de Outliers:** Identificación de canciones atípicas (ej: canciones de rock muy suaves) que podrían confundir al modelo.
-
-### 2. Feature Engineering🛠️
-
-Para mejorar la capacidad predictiva, no nos limitamos a las variables originales. Creamos nuevas métricas sintéticas basadas en conocimiento del dominio musical:
-*   **`Intensity`**: Producto de `energy * loudness`. Captura la "potencia" percibile.
-*   **`Dance_Tempo`**: Relación entre ritmo y velocidad.
-*   **`Chill_Factor`**: Diferencia entre valencia positiva y energía, útil para separar géneros relajados.
-
-### 3. Preprocesamiento de Datos 🧹
-
-*   Codificación de variables categóricas (`LabelEncoder`).
-*   Escalado de datos (`StandardScaler`) para algoritmos sensibles a la magnitud (como KNN en la fase experimental).
-*   División estratificada del dataset (Train/Test Split) para garantizar que todos los géneros estén representados equitativamente.
-
-### 4. Selección y Entrenamiento de Modelos 🤖
-
-Se sometieron a prueba dos familias de algoritmos:
-1.  **Random Forest:** Como modelo base de *bagging*.
-2.  **XGBoost (Extreme Gradient Boosting):** Como modelo avanzado de *boosting*.
-
-**Resultado:** XGBoost superó al Random Forest en métricas de precisión y ROC-AUC, demostrando mayor capacidad para manejar las fronteras de decisión complejas entre *Rock* y *Acoustic*.
-
-### 5. Evaluación y Métricas 📈
-
-El modelo final fue auditado exhaustivamente:
-*   **Matriz de Confusión:** Análisis de errores tipo I y II. (ej: ¿Con qué confunde la IA al Rock?).
-*   **Curva ROC / AUC:** Validación de la robustez del clasificador (>0.95 AUC).
-*   **Feature Importance:** Confirmación de que `acousticness` y `loudness` son los predictores más potentes.
+*   **Llenguatge:** Python
+*   **Manipulació de Dades:** Pandas, NumPy
+*   **Visualització:** Matplotlib, Seaborn
+*   **Machine Learning:** Scikit-Learn (PCA, Scaling, Metrics, RandomForest), XGBoost
+*   **Validació:** K-Fold Cross Validation, ROC Curves
 
 ---
 
-## 🏆 Resultados Clave
+## 📊 Metodologia
 
-| Métrica | Random Forest | **XGBoost (Final)** |
-| :--- | :---: | :---: |
-| Accuracy | 89% | **92%** |
-| F1-Score (Macro) | 0.88 | **0.91** |
+El projecte segueix una estructura seqüencial rigorosa:
 
+### 1. Preprocessament i Neteja 🧹
+*   Reducció del dataset original (114k cançons) a un subconjunt equilibrat de 4.000 mostres per garantir qualitat sobre quantitat.
+*   Eliminació de duplicats per `track_id` i combinacions `Nom + Artista`.
+*   Neteja de metadades irrellevants per forçar l'aprenentatge basat en àudio.
 
-> **Conclusión Técnica:** El modelo demuestra que los géneros musicales no son etiquetas subjetivas, sino clústeres matemáticos bien definidos. La separación entre géneros acústicos (Classical/Acoustic) y eléctricos (Rock/Dance) es casi perfecta, existiendo solo una pequeña confusión en las fronteras difusas (subgéneros híbridos).
+### 2. Feature Engineering 🧪
+Creació de variables sintètiques per capturar relacions no lineals:
+*   `Intensity`: Combinació de *Loudness* i *Energy*.
+*   `Dance_Tempo`: Relació entre ritme i ballabilitat.
+*   `Chill_Factor`: Diferencial entre positivitat (*Valence*) i energia.
+
+### 3. Exploratory Data Analysis (EDA) 📈
+*   **Mapes de calor:** Detecció de multicolinealitat (ex: *Energy* vs *Loudness*).
+*   **Boxplots:** Identificació de "signatures" de gènere (ex: la nul·la energia del *Classical* vs la saturació del *Hard-Rock*).
+
+### 4. Modelatge i Optimització 🤖
+S'han avaluat múltiples models, culminant en un **XGBoost Classifier**:
+*   **Baseline (Random Forest):** 87.55% Accuracy.
+*   **XGBoost (Tuned):** Optimització d'hiperparàmetres (GridSearchCV amb 72 candidats).
+*   **Resultat Final:** **89.38% Accuracy** en Test.
 
 ---
 
-## 🚀 Extra: Aplicación MLOps
+## 🏆 Resultats Clau
 
-Como complemento al análisis, se ha incluido en la carpeta `/app` una pequeña demostración de **Productivización del Modelo**.
+El model final (XGBoost) ha demostrat una robustesa excepcional:
 
-Se trata de un script en Streamlit (`spotify_recommender.py`) que carga el modelo entrenado y permite realizar inferencias en tiempo real, además de incluir un sistema de recomendación básico mediante KNN.
+| Mètrica | Valor | Interpretació |
+| :--- | :--- | :--- |
+| **Accuracy** | **89.38%** | El model encerta gairebé 9 de cada 10 cançons. |
+| **AUC (Mitjana)** | **0.98** | Capacitat quasi perfecta de rànquing probabilístic. |
+| **Cross-Validation** | **88.69% (±1.9%)** | El model és estable i no depèn del split de dades. |
+
+### Visualització de Rendiment
+
+<p align="center">
+  <!-- Pots substituir aquestes rutes per les imatges reals si les puges al repo -->
+  <img src="assets/confusion_matrix.png" alt="Confusion Matrix" width="45%">
+  <img src="assets/roc_curve.png" alt="ROC Curve" width="45%">
+</p>
+
+*   **Classical & Dance:** Gairebé perfectes (F1 > 0.90).
+*   **Hard-Rock & Acoustic:** Petites confusions acceptables degut a solapaments espectrals visualitzats al PCA.
 
 ---
 
-## ⚙️ Reproducibilidad
+## 🚀 Com executar el projecte
 
-Para ejecutar el notebook en local:
+1.  **Clonar el repositori:**
+    ```bash
+    git clone https://github.com/ChengjiePL/music-genre-classification.git
+    cd music-genre-classification
+    ```
 
-1.  Clonar el repositorio.
-2.  Instalar dependencias:
+2.  **Instal·lar dependències:**
     ```bash
     pip install -r requirements.txt
     ```
-3.  Lanzar Jupyter:
-    ```bash
-    jupyter notebook Music_Genre_Classification.ipynb
-    ```
+
+3.  **Executar el Notebook:**
+    Obre `music_classification.ipynb` a Jupyter Lab o VS Code i executa les cel·les seqüencialment.
 
 ---
-*Proyecto realizado para la asignatura de Aprendizaje Computacional.*
+
+## 🧠 Conclusions i Aplicabilitat Real
+
+Aquest projecte demostra que, tot i la complexitat de la música, les característiques d'àudio contenen patrons matemàtics clars que un model de *Gradient Boosting* pot desxifrar. 
+
+**Aplicacions pràctiques:**
+*   🎧 **Sistemes de Recomanació:** Suggerir cançons similars basant-se en l'àudio, no en l'artista.
+*   📂 **Organització Automàtica:** Classificació de biblioteques musicals personals.
+*   📻 **Generació de Playlists:** Creació de llistes per "estat d'ànim" (ex: filtrar per *Chill_Factor* alt).
+
+---
+
+## 👤 Autor
+
+**ChengjiePL**  
+*Data Science Student & Developer*
+
+---
+
+> *Aquest projecte ha estat realitzat amb finalitats acadèmiques, buscant l'excel·lència en la metodologia de Data Science.*
+
