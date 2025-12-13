@@ -10,20 +10,20 @@
 
 ---
 
-## 📖 Descripció del Projecte
+## Descripció del Projecte
 
 Aquest projecte desenvolupa un model de *Machine Learning* capaç de classificar cançons en quatre gèneres musicals distintius (**Acoustic, Classical, Dance, Hard-Rock**) basant-se exclusivament en les seves propietats acústiques (`energy`, `valence`, `tempo`, etc.).
 
 L'objectiu no és només obtenir una alta precisió, sinó demostrar un **flux de treball científic complet**: des de la neteja de dades i l'enginyeria de característiques fins a l'avaluació probabilística avançada i la interpretació de models "Black Box".
 
-### 🎯 Objectius Principals
+### Objectius Principals
 1.  **Entendre les dades:** Analitzar com es diferencien els gèneres físicament mitjançant tècniques estadístiques i visuals (PCA, Correlacions).
 2.  **Construir un classificador robust:** Superar el 85% d'accuracy minimitzant el *data leakage*.
 3.  **Optimització científica:** Utilitzar tècniques avançades com *GridSearchCV* i *Cross-Validation* per garantir l'estabilitat.
 
 ---
 
-## 🛠️ Tecnologies i Llibreries
+## Tecnologies i Llibreries
 
 *   **Llenguatge:** Python
 *   **Manipulació de Dades:** Pandas, NumPy
@@ -33,26 +33,26 @@ L'objectiu no és només obtenir una alta precisió, sinó demostrar un **flux d
 
 ---
 
-## 📊 Metodologia
+## Metodologia
 
 El projecte segueix una estructura seqüencial rigorosa:
 
-### 1. Preprocessament i Neteja 🧹
+### 1. Preprocessament i Neteja
 *   Reducció del dataset original (114k cançons) a un subconjunt equilibrat de 4.000 mostres per garantir qualitat sobre quantitat.
 *   Eliminació de duplicats per `track_id` i combinacions `Nom + Artista`.
 *   Neteja de metadades irrellevants per forçar l'aprenentatge basat en àudio.
 
-### 2. Feature Engineering 🧪
+### 2. Feature Engineering
 Creació de variables sintètiques per capturar relacions no lineals:
 *   `Intensity`: Combinació de *Loudness* i *Energy*.
 *   `Dance_Tempo`: Relació entre ritme i ballabilitat.
 *   `Chill_Factor`: Diferencial entre positivitat (*Valence*) i energia.
 
-### 3. Exploratory Data Analysis (EDA) 📈
+### 3. Exploratory Data Analysis (EDA)
 *   **Mapes de calor:** Detecció de multicolinealitat (ex: *Energy* vs *Loudness*).
 *   **Boxplots:** Identificació de "signatures" de gènere (ex: la nul·la energia del *Classical* vs la saturació del *Hard-Rock*).
 
-### 4. Modelatge i Optimització 🤖
+### 4. Modelatge i Optimització
 S'han avaluat múltiples models, culminant en un **XGBoost Classifier**:
 *   **Baseline (Random Forest):** 87.55% Accuracy.
 *   **XGBoost (Tuned):** Optimització d'hiperparàmetres (GridSearchCV amb 72 candidats).
@@ -60,7 +60,7 @@ S'han avaluat múltiples models, culminant en un **XGBoost Classifier**:
 
 ---
 
-## 🏆 Resultats Clau
+## Resultats Clau
 
 El model final (XGBoost) ha demostrat una robustesa excepcional:
 
@@ -83,7 +83,7 @@ El model final (XGBoost) ha demostrat una robustesa excepcional:
 
 ---
 
-## 🚀 Com executar el projecte
+## Com executar el projecte
 
 1.  **Clonar el repositori:**
     ```bash
@@ -101,23 +101,17 @@ El model final (XGBoost) ha demostrat una robustesa excepcional:
 
 ---
 
-## 🧠 Conclusions i Aplicabilitat Real
+## Conclusions i Aplicabilitat Real
 
 Aquest projecte demostra que, tot i la complexitat de la música, les característiques d'àudio contenen patrons matemàtics clars que un model de *Gradient Boosting* pot desxifrar. 
 
 **Aplicacions pràctiques:**
-*   🎧 **Sistemes de Recomanació:** Suggerir cançons similars basant-se en l'àudio, no en l'artista.
-*   📂 **Organització Automàtica:** Classificació de biblioteques musicals personals.
-*   📻 **Generació de Playlists:** Creació de llistes per "estat d'ànim" (ex: filtrar per *Chill_Factor* alt).
+*   **Sistemes de Recomanació:** Suggerir cançons similars basant-se en l'àudio, no en l'artista.
+*   **Organització Automàtica:** Classificació de biblioteques musicals personals.
+*   **Generació de Playlists:** Creació de llistes per "estat d'ànim" (ex: filtrar per *Chill_Factor* alt).
 
 ---
 
-## 👤 Autor
+## Autors
 
-**ChengjiePL**  
-*Data Science Student & Developer*
-
----
-
-> *Aquest projecte ha estat realitzat amb finalitats acadèmiques, buscant l'excel·lència en la metodologia de Data Science.*
-
+[Chengjie Peng Lin](https://linkedin.com/in/chengjiepl)
