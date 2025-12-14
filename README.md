@@ -114,5 +114,5 @@ Aquest projecte demostra que, tot i la complexitat de la música, les caracterí
 
 ## Autors
 
-[Chengjie Peng Lin](https://linkedin.com/in/chengjiepl)
+[Chengjie Peng Lin](https://linkedin.com/in/chengjiepl) \
 Gerard Saez
