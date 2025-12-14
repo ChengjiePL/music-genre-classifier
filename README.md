@@ -2,9 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?logo=jupyter&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Library-Scikit--Learn-orange?logo=scikit-learn&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/Model-XGBoost-green?logo=xgboost&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 > **Un enfocament de Data Science rigorós per classificar gèneres musicals utilitzant característiques d'àudio de Spotify, des de l'Exploratory Data Analysis (EDA) fins al desplegament d'un model XGBoost optimitzat.**
 
@@ -13,8 +11,6 @@
 ## Descripció del Projecte
 
 Aquest projecte desenvolupa un model de *Machine Learning* capaç de classificar cançons en quatre gèneres musicals distintius (**Acoustic, Classical, Dance, Hard-Rock**) basant-se exclusivament en les seves propietats acústiques (`energy`, `valence`, `tempo`, etc.).
-
-L'objectiu no és només obtenir una alta precisió, sinó demostrar un **flux de treball científic complet**: des de la neteja de dades i l'enginyeria de característiques fins a l'avaluació probabilística avançada i la interpretació de models "Black Box".
 
 ### Objectius Principals
 1.  **Entendre les dades:** Analitzar com es diferencien els gèneres físicament mitjançant tècniques estadístiques i visuals (PCA, Correlacions).
